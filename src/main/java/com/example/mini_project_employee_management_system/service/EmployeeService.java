@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.mini_project_employee_management_system.dto.EmployeeCreateRequest;
@@ -20,28 +19,24 @@ import com.example.mini_project_employee_management_system.repository.EmployeeRe
 public class EmployeeService {
 
     private final UtilityService utilityService;
-    private final PasswordEncoder passwordEncoder;
     private final EmployeeRepository employeeRepository;
     private final DepartmentRepository departmentRepository;
 
     public EmployeeService(
             UtilityService utilityService,
-            PasswordEncoder passwordEncoder,
             EmployeeRepository employeeRepository,
             DepartmentRepository departmentRepository
     ) {
         this.utilityService = utilityService;
-        this.passwordEncoder = passwordEncoder;
         this.employeeRepository = employeeRepository;
         this.departmentRepository = departmentRepository;
     }
 
-    public String createEmployee(String name, String rawPassword) {
+    public String createEmployee(String name) {
         String code = utilityService.generateEmployeeCode();
         String formattedName = utilityService.formatName(name);
-        String encodedPassword = passwordEncoder.encode(rawPassword);
 
-        return formattedName + " | " + code + " | " + encodedPassword;
+        return formattedName + " | " + code;
     }
 
     public List<Employee> findAll(String search) {
