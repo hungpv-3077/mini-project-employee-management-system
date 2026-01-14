@@ -21,7 +21,7 @@ import com.example.mini_project_employee_management_system.service.EmployeeServi
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/employees")
+@RequestMapping("/api/employees")
 public class EmployeeController {
 
     private final EmployeeService employeeService;

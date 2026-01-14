@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Employee</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Employee Management System</h1>
+            <nav>
+                <a th:href="@{/employees/list}">Employee List</a>
+                <a th:href="@{/employees/add}" class="active">Add New</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="content-box">
+            <h2>Add New Employee</h2>
+            
+            <!-- Error Message -->
+            <div th:if="${error}" class="alert alert-error">
+                <p th:text="${error}"></p>
+            </div>
+            
+            <form th:action="@{/employees/add}" th:object="${employee}" method="post" class="employee-form">
+                <div class="form-group">
+                    <label for="name">Name <span class="required">*</span></label>
+                    <input type="text" id="name" th:field="*{name}" class="form-input" 
+                           placeholder="John Doe">
+                    <span th:if="${#fields.hasErrors('name')}" 
+                          th:errors="*{name}" class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" th:field="*{email}" class="form-input" 
+                           placeholder="john.doe@example.com">
+                    <span th:if="${#fields.hasErrors('email')}" 
+                          th:errors="*{email}" class="error-message"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="departmentId">Department <span class="required">*</span></label>
+                    <select id="departmentId" th:field="*{departmentId}" class="form-select">
+                        <option value="">Please select</option>
+                        <option th:each="dept : ${departments}" 
+                                th:value="${dept.id}" 
+                                th:text="${dept.name}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('departmentId')}" 
+                          th:errors="*{departmentId}" class="error-message"></span>
+                </div>
+                
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Register</button>
+                    <a th:href="@{/employees/list}" class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Employee Management System</p>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Employee Management System</h1>
+            <nav>
+                <a th:href="@{/employees/list}" class="active">Employee List</a>
+                <a th:href="@{/employees/add}">Add New</a>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container">
+        <div class="content-box">
+            <h2>Employee List</h2>
+            
+            <!-- Success Message -->
+            <div th:if="${param.success}" class="alert alert-success">
+                Employee registered successfully.
+            </div>
+            
+            <!-- Search Form -->
+            <form th:action="@{/employees/list}" method="get" class="search-form">
+                <div class="form-group">
+                    <input type="text" name="search" th:value="${search}" 
+                           placeholder="Search by name or department" class="form-input">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                    <a th:href="@{/employees/list}" class="btn btn-secondary">Clear</a>
+                </div>
+            </form>
+            
+            <!-- Employee Table -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Employee Code</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Department</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:if="${#lists.isEmpty(employees)}">
+                            <td colspan="4" class="text-center">No employees found.</td>
+                        </tr>
+                        <tr th:each="employee : ${employees}">
+                            <td th:text="${employee.code}"></td>
+                            <td th:text="${employee.name}"></td>
+                            <td th:text="${employee.email}"></td>
+                            <td th:text="${employee.department?.name ?: '-'}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Employee Management System</p>
+        </div>
+    </footer>
+</body>
+</html>
