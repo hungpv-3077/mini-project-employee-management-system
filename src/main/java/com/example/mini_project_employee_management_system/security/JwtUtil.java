@@ -19,6 +19,7 @@ public class JwtUtil {
     private static final long EXPIRATION_TIME = 86400000; // 24 hours
 
     public String generateToken(Authentication authentication) {
+        System.out.println(authentication);
         String username = authentication.getName();
         String roles = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)

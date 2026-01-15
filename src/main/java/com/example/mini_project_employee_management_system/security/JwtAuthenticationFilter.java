@@ -30,6 +30,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
+        
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
@@ -39,14 +40,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 String roles = jwtUtil.getRolesFromToken(token);
 
                 List<SimpleGrantedAuthority> authorities = Arrays.stream(roles.split(","))
-                        .map(SimpleGrantedAuthority::new)
+                        .map(role -> {
+                            return new SimpleGrantedAuthority(role);
+                        })
                         .collect(Collectors.toList());
 
                 UsernamePasswordAuthenticationToken authentication = 
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }
+            } 
         }
 
         filterChain.doFilter(request, response);

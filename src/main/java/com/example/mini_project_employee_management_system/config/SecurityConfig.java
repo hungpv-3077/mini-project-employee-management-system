@@ -40,10 +40,10 @@ public class SecurityConfig {
                 .requestMatchers("/employees/**", "/css/**", "/js/**").permitAll()
                 
                 // Employee API endpoints - role-based access
-                .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("USER", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAuthority("ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasAuthority("ADMIN")
+                .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("user", "USER", "admin", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
                 
                 // All other requests require authentication
                 .anyRequest().authenticated()
