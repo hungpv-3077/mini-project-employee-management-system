@@ -13,10 +13,10 @@ import com.example.mini_project_employee_management_system.dto.EmployeeCreateReq
 import com.example.mini_project_employee_management_system.dto.EmployeeUpdateRequest;
 import com.example.mini_project_employee_management_system.entity.Department;
 import com.example.mini_project_employee_management_system.entity.Employee;
+import com.example.mini_project_employee_management_system.exception.ResourceNotFoundException;
 import com.example.mini_project_employee_management_system.exception.ValidationException;
 import com.example.mini_project_employee_management_system.repository.DepartmentRepository;
 import com.example.mini_project_employee_management_system.repository.EmployeeRepository;
-
 @Service
 public class EmployeeService {
 
@@ -56,7 +56,7 @@ public class EmployeeService {
         log.info("Creating employee: name={}, email={}",
                 request.getName(), request.getEmail());
         Department department = departmentRepository.findById(request.getDepartmentId())
-                .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
 
         Employee employee = new Employee();
         employee.setCode(utilityService.generateEmployeeCode());
@@ -105,7 +105,7 @@ public class EmployeeService {
         // Update department if provided
         if (request.getDepartmentId() != null) {
             Department department = departmentRepository.findById(request.getDepartmentId())
-                    .orElseThrow(() -> new IllegalArgumentException("Department not found"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
             employee.setDepartment(department);
         }
 
@@ -119,7 +119,7 @@ public class EmployeeService {
     public Map<String, String> delete(Long id) {
         log.info("Deleting employee id={}", id);
         Employee employee = employeeRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Employee not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found with id: " + id));
 
         employeeRepository.delete(employee);
 
