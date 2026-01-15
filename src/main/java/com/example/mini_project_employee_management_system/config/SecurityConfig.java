@@ -32,30 +32,29 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf.disable())
-            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
                 // Public endpoints
                 .requestMatchers("/api/auth/**").permitAll()
+                .requestMatchers("/actuator/health/**").permitAll()
                 .requestMatchers("/employees/**", "/css/**", "/js/**").permitAll()
-                
                 // Employee API endpoints - role-based access
-                .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("user", "USER", "admin", "ADMIN")
-                .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
-                .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasAnyAuthority("admin", "ADMIN")
-                
+                .requestMatchers(HttpMethod.GET, "/api/employees/**").hasAnyAuthority("user", "USER", "ROLE_ADMIN", "ADMIN")
+                .requestMatchers(HttpMethod.POST, "/api/employees/**").hasAnyAuthority("admin", "ROLE_ADMIN", "ADMIN")
+                .requestMatchers(HttpMethod.PUT, "/api/employees/**").hasAnyAuthority("admin", "ROLE_ADMIN", "ADMIN")
+                .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasAnyAuthority("admin", "ROLE_ADMIN", "ADMIN")
                 // All other requests require authentication
                 .anyRequest().authenticated()
-            )
-            .exceptionHandling(ex -> ex
+                )
+                .exceptionHandling(ex -> ex
                 .authenticationEntryPoint((request, response, authException) -> {
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
                     response.getWriter().write("{\"error\":\"Unauthorized\",\"message\":\"" + authException.getMessage() + "\"}");
                 })
-            )
-            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                )
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

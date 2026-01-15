@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.mini_project_employee_management_system.dto.EmployeeCreateRequest;
 import com.example.mini_project_employee_management_system.dto.EmployeeUpdateRequest;
 import com.example.mini_project_employee_management_system.entity.Employee;
+import com.example.mini_project_employee_management_system.service.EmployeeReportService;
 import com.example.mini_project_employee_management_system.service.EmployeeService;
 
 import jakarta.validation.Valid;
@@ -25,9 +26,11 @@ import jakarta.validation.Valid;
 public class EmployeeController {
 
     private final EmployeeService employeeService;
+    private final EmployeeReportService reportService;
 
-    public EmployeeController(EmployeeService employeeService) {
+    public EmployeeController(EmployeeService employeeService, EmployeeReportService reportService) {
         this.employeeService = employeeService;
+        this.reportService = reportService;
     }
 
     @GetMapping()
@@ -54,5 +57,10 @@ public class EmployeeController {
     @DeleteMapping("/{id}")
     public Map<String, String> delete(@PathVariable Long id) {
         return employeeService.delete(id);
+    }
+
+    @GetMapping("/count")
+    public long getEmployeeCount() {
+        return reportService.getTotalEmployees();
     }
 }
