@@ -1,5 +1,6 @@
 package com.example.mini_project_employee_management_system.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -62,5 +63,13 @@ public class EmployeeController {
     @GetMapping("/count")
     public long getEmployeeCount() {
         return reportService.getTotalEmployees();
+    }
+
+    @GetMapping("/statistics")
+    public Map<String, Object> getStatistics() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("totalEmployees", reportService.getTotalEmployees());
+        stats.put("departmentStatistics", reportService.getEmployeesByDepartment());
+        return stats;
     }
 }

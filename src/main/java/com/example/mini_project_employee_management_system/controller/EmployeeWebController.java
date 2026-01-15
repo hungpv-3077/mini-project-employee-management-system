@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.mini_project_employee_management_system.dto.EmployeeCreateRequest;
-import com.example.mini_project_employee_management_system.entity.Department;
 import com.example.mini_project_employee_management_system.entity.Employee;
 import com.example.mini_project_employee_management_system.repository.DepartmentRepository;
 import com.example.mini_project_employee_management_system.service.EmployeeService;
@@ -62,5 +61,12 @@ public class EmployeeWebController {
             model.addAttribute("departments", departmentRepository.findAll());
             return "employees/add";
         }
+    }
+
+    @GetMapping("/statistics")
+    public String showStatistics(Model model) {
+        model.addAttribute("totalEmployees", employeeService.findAll(null).size());
+        model.addAttribute("departmentStats", departmentRepository.getDepartmentStatistics());
+        return "employees/statistics";
     }
 }

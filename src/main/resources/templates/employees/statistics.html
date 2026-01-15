@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Statistics</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Employee Management System</h1>
+            <nav>
+                <a th:href="@{/employees/list}">Employee List</a>
+                <a th:href="@{/employees/add}">Add New</a>
+                <a th:href="@{/employees/statistics}" class="active">Statistics</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="content-box">
+            <h2>Employee Statistics</h2>
+
+            <!-- Total Employees Card -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Employees</h3>
+                    <div class="stat-value" th:text="${totalEmployees}">0</div>
+                </div>
+            </div>
+
+            <!-- Department Statistics Table -->
+            <div class="department-table">
+                <h3>Employees by Department</h3>
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>Department Name</th>
+                            <th>Number of Employees</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="stat : ${departmentStats}">
+                            <td th:text="${stat.departmentName}">IT</td>
+                            <td th:text="${stat.employeeCount}">0</td>
+                        </tr>
+                        <tr th:if="${#lists.isEmpty(departmentStats)}">
+                            <td colspan="2" class="empty-state">No data available</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="stats-actions">
+                <a href="/employees/list" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Employee Management System</p>
+        </div>
+    </footer>
+</body>
+</html>
